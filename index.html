@@ -1,32 +1,913 @@
-.answer{
-  background:#f3f7fa;
-  min-height:95px;
-  border-radius:24px;
-  border:3px solid transparent;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  font-size:22px;
-  font-weight:bold;
-  padding:15px;
-  margin:0;
-  box-shadow:0 5px 12px rgba(0,0,0,.10);
-  transition:transform .15s, box-shadow .15s;
-}
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>Little Brain Adventure - V10</title>  <style>  
+*{  
+  box-sizing:border-box;  
+}  
+  
+body{  
+  margin:0;  
+  font-family:Arial,sans-serif;  
+  background:linear-gradient(135deg,#9eeaf5,#dfffd8);  
+  color:#263648;  
+  min-height:100vh;  
+}  
+  
+.app{  
+  width:min(520px,94%);  
+  margin:auto;  
+  padding:18px 0 35px;  
+}  
+  
+.card{  
+  background:white;  
+  border-radius:28px;  
+  padding:22px;  
+  box-shadow:0 12px 35px rgba(0,0,0,.15);  
+}  
+  
+.hidden{  
+  display:none !important;  
+}  
+  
+/* HOME */  
+  
+.logo{  
+  font-size:76px;  
+  text-align:center;  
+  animation:bounce 2s infinite;  
+}  
+  
+@keyframes bounce{  
+  0%,100%{transform:translateY(0)}  
+  50%{transform:translateY(-8px)}  
+}  
+  
+h1{  
+  text-align:center;  
+  color:#ff8400;  
+  font-size:42px;  
+  margin:8px 0;  
+}  
+  
+.subtitle{  
+  text-align:center;  
+  font-size:18px;  
+  margin:15px 0 25px;  
+}  
+  
+.tagline{  
+  text-align:center;  
+  font-size:22px;  
+  font-weight:bold;  
+}  
+  
+button{  
+  border:0;  
+  border-radius:18px;  
+  padding:14px 18px;  
+  font-size:18px;  
+  font-weight:bold;  
+  cursor:pointer;  
+  width:100%;  
+  margin:7px 0;  
+}  
+  
+.primary{  
+  background:#55c94f;  
+  color:white;  
+}  
+  
+.blue{  
+  background:#42aee5;  
+  color:white;  
+}  
+  
+.orange{  
+  background:#ff9d28;  
+  color:white;  
+}  
+  
+.purple{  
+  background:#9b72e8;  
+  color:white;  
+}  
+  
+.gray{  
+  background:#eeeeee;  
+  color:#222;  
+}  
+  
+/* TOP */  
+  
+.top{  
+  display:flex;  
+  justify-content:space-between;  
+  align-items:center;  
+  margin-bottom:15px;  
+}  
+  
+.pill{  
+  background:#fff3d6;  
+  border-radius:18px;  
+  padding:9px 13px;  
+  font-weight:bold;  
+}  
+  
+/* GAME */  
+  
+.game-title{  
+  text-align:center;  
+  font-size:26px;  
+  color:#ff8400;  
+}  
+  
+.level{  
+  text-align:center;  
+  font-size:17px;  
+  font-weight:bold;  
+}  
+  
+.progressbar{  
+  height:14px;  
+  background:#e7e7e7;  
+  border-radius:20px;  
+  overflow:hidden;  
+  margin:12px 0 22px;  
+}  
+  
+.progressfill{  
+  height:100%;  
+  width:0%;  
+  background:#55c94f;  
+  transition:.4s;  
+}  
+  
+.question{  
+  background:#f5fbff;  
+  border-radius:22px;  
+  padding:22px 14px;  
+  text-align:center;  
+  font-size:23px;  
+  font-weight:bold;  
+  margin-bottom:15px;  
+}  
+  
+.answer-grid{  
+  display:grid;  
+  grid-template-columns:1fr 1fr;  
+  gap:10px;  
+}  
+  
+.answer{  
+  background:#f0f0f0;  
+  min-height:65px;  
+}  
+  
+.answer:hover{  
+  transform:scale(1.02);  
+}  
+  
+.feedback{  
+  text-align:center;  
+  min-height:35px;  
+  font-size:20px;  
+  font-weight:bold;  
+  margin:10px;  
+}  
+  
+.correct{  
+  color:#2fa52b;  
+}  
+  
+.wrong{  
+  color:#e04b4b;  
+}  
+  
+/* LEVEL MAP */  
+  
+.map-grid{  
+  display:grid;  
+  grid-template-columns:repeat(5,1fr);  
+  gap:10px;  
+  margin-top:20px;  
+}  
+  
+.level-btn{  
+  width:auto;  
+  margin:0;  
+  padding:13px 5px;  
+  font-size:15px;  
+  background:#eee;  
+}  
+  
+.level-btn.unlocked{  
+  background:#55c94f;  
+  color:white;  
+}  
+  
+.level-btn.completed{  
+  background:#ffb52e;  
+  color:white;  
+}  
+  
+.level-btn.locked{  
+  opacity:.45;  
+}  
+  
+/* PROGRESS */  
+  
+.stat{  
+  background:#f5f5f5;  
+  border-radius:18px;  
+  padding:15px;  
+  margin:10px 0;  
+  font-size:18px;  
+}  
+  
+.stat strong{  
+  float:right;  
+}  
+  
+/* BADGES */  
+  
+.badges{  
+  display:grid;  
+  grid-template-columns:1fr 1fr;  
+  gap:12px;  
+}  
+  
+.badge{  
+  background:#f5f5f5;  
+  border-radius:20px;  
+  padding:20px 10px;  
+  text-align:center;  
+  font-size:18px;  
+}  
+  
+.badge-icon{  
+  font-size:42px;  
+}  
+  
+.locked-badge{  
+  opacity:.35;  
+}  
+  
+/* CHARACTER */  
+  
+.character{  
+  text-align:center;  
+  font-size:100px;  
+  animation:bounce 2s infinite;  
+}  
+  
+.character-name{  
+  text-align:center;  
+  font-size:26px;  
+  font-weight:bold;  
+  color:#ff8400;  
+}  
+  
+/* PARENT */  
+  
+.parent-box{  
+  background:#f5fbff;  
+  border-radius:20px;  
+  padding:18px;  
+  margin:12px 0;  
+}  
+  
+.small{  
+  font-size:14px;  
+  color:#666;  
+}  
+  
+.back{  
+  background:#eeeeee;  
+  color:#222;  
+}  
+  
+/* RESPONSIVE */  
+  
+@media(max-width:380px){  
+  h1{font-size:34px}  
+  .logo{font-size:60px}  
+  .question{font-size:20px}  
+  .map-grid{gap:6px}  
+}  
+</style>  </head>  <body>  <div class="app">  <!-- HOME -->  <section id="home" class="card">    <div class="logo">🦁</div>    <h1>LITTLE BRAIN<br>ADVENTURE</h1>    <div class="subtitle">PLAY • LEARN • GROW</div>    <div class="tagline">30 fun brain-building levels!</div>    <br>    <button class="primary" onclick="startGame()">  
+    ▶️ PLAY  
+  </button>    <button class="blue" onclick="showProgress()">  
+    📊 Progress  
+  </button>    <button class="gray" onclick="showMap()">  
+    🗺️ Adventure Map  
+  </button>    <button class="gray" onclick="showBadges()">  
+    🏆 Badges  
+  </button>    <button class="gray" onclick="showCharacter()">  
+    🦁 Character  
+  </button>    <button class="gray" onclick="showParents()">  
+    👨‍👩‍👧 Parents  
+  </button>  </section>  <!-- GAME -->  <section id="game" class="card hidden">    <div class="top">  
+    <div class="pill">🦁 Leo</div>  
+    <div class="pill">⭐ <span id="gameStars">0</span></div>  
+  </div>    <div class="game-title">Brain Challenge</div>    <div class="level">  
+    Level <span id="levelNumber">1</span> / 30  
+  </div>    <div class="progressbar">  
+    <div id="progressFill" class="progressfill"></div>  
+  </div>    <div id="question" class="question"></div>    <div id="answers" class="answer-grid"></div>    <div id="feedback" class="feedback"></div>  <button id="nextBtn"  
+class="primary hidden"  
+onclick="nextLevel()">
+➡️ NEXT LEVEL
+</button>
 
-.answer:hover{
-  transform:scale(1.03);
-  box-shadow:0 8px 18px rgba(0,0,0,.15);
-}
+  <button class="back" onclick="goHome()">  
+    🏠 Home  
+  </button>  </section>  <!-- MAP -->  <section id="map" class="card hidden">    <h2 style="text-align:center;">🗺️ Adventure Map</h2>    <p style="text-align:center;">  
+    Complete levels to unlock new adventures!  
+  </p>    <div id="mapGrid" class="map-grid"></div>  <button class="back" onclick="goHome()">🏠 Home</button>
 
-.answer:active{
-  transform:scale(.96);
-}
+</section>  <!-- PROGRESS -->  <section id="progress" class="card hidden">    <h2 style="text-align:center;">📊 Your Progress</h2>    <div class="stat">  
+    Levels Completed  
+    <strong id="completedStat">0 / 30</strong>  
+  </div>    <div class="stat">  
+    ⭐ Stars  
+    <strong id="starsStat">0</strong>  
+  </div>    <div class="stat">  
+    🎯 Best Score  
+    <strong id="scoreStat">0%</strong>  
+  </div>    <div class="stat">  
+    🏆 Badges  
+    <strong id="badgeStat">0</strong>  
+  </div>  <button class="back" onclick="goHome()">🏠 Home</button>
 
-.answer-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-  margin-top:10px;
-}
+</section>  <!-- BADGES -->  <section id="badges" class="card hidden">    <h2 style="text-align:center;">🏆 Badges</h2>    <div id="badgeContainer" class="badges"></div>  <button class="back" onclick="goHome()">🏠 Home</button>
+
+</section>  <!-- CHARACTER -->  <section id="character" class="card hidden">    <h2 style="text-align:center;">🦁 My Character</h2>    <div class="character">🦁</div>    <div class="character-name">Leo the Brain Lion</div>    <p style="text-align:center;">  
+    Keep learning and Leo will become stronger!  
+  </p>    <div class="stat">  
+    ⭐ Stars  
+    <strong id="charStars">0</strong>  
+  </div>    <div class="stat">  
+    🧠 Levels  
+    <strong id="charLevels">0</strong>  
+  </div>  <button class="back" onclick="goHome()">🏠 Home</button>
+
+</section>  <!-- PARENTS -->  <section id="parents" class="card hidden">    <h2 style="text-align:center;">👨‍👩‍👧 Parents</h2>    <div class="parent-box">  
+    <b>🎓 Learning Progress</b>  
+    <p id="parentProgress">0 of 30 levels completed.</p>  
+  </div>    <div class="parent-box">  
+    <b>⭐ Stars Earned</b>  
+    <p id="parentStars">0 stars</p>  
+  </div>    <div class="parent-box">  
+    <b>🧠 Skills</b>  
+    <p>  
+      Memory • Counting • Animals • Shapes • Logic  
+    </p>  
+  </div>    <p class="small">  
+    This game is designed as a simple educational brain-training  
+    experience for children.  
+  </p>  <button class="back" onclick="goHome()">🏠 Home</button>
+
+</section>  </div>  <script>  
+  
+/* =========================  
+   GAME DATA  
+========================= */  
+  
+const levels = [  
+  
+ {q:"What number comes next? 1, 2, 3, ?",a:["4","5","6","7"],c:0},  
+ {q:"Which animal says MEOW?",a:["🐶 Dog","🐱 Cat","🐮 Cow","🦁 Lion"],c:1},  
+ {q:"Find the matching shape: 🔵",a:["🔺","🟩","🔵","⭐"],c:2},  
+ {q:"Which number is biggest?",a:["3","8","5","1"],c:1},  
+ {q:"What comes next? 2, 4, 6, ?",a:["7","8","9","10"],c:1},  
+ {q:"How many apples? 🍎🍎🍎",a:["2","3","4","5"],c:1},  
+ {q:"Which one is a fruit?",a:["🚗","🍎","🏠","🐶"],c:1},  
+ {q:"What color is the sun usually shown as?",a:["Blue","Green","Yellow","Purple"],c:2},  
+ {q:"Which animal is big?",a:["🐜","🐭","🐘","🐝"],c:2},  
+ {q:"What comes next? A, B, C, ?",a:["D","E","F","G"],c:0},  
+  
+ {q:"How many stars? ⭐⭐⭐⭐",a:["3","4","5","6"],c:1},  
+ {q:"Which shape has 3 sides?",a:["🔵 Circle","🔺 Triangle","⬜ Square","⭐ Star"],c:1},  
+ {q:"What is 2 + 2?",a:["3","4","5","6"],c:1},  
+ {q:"Which animal can fly?",a:["🐟 Fish","🐘 Elephant","🐦 Bird","🐄 Cow"],c:2},  
+ {q:"What comes next? 5, 10, 15, ?",a:["18","20","25","30"],c:1},  
+ {q:"Which is smaller?",a:["9","7","3","8"],c:2},  
+ {q:"Which one is a vehicle?",a:["🍎","🚗","🐶","🌳"],c:1},  
+ {q:"How many fingers on one hand?",a:["4","5","6","10"],c:1},  
+ {q:"Which animal lives in water?",a:["🐟 Fish","🦁 Lion","🐘 Elephant","🐔 Hen"],c:0},  
+ {q:"What is 5 - 2?",a:["2","3","4","5"],c:1},  
+  
+ {q:"Which one is a circle?",a:["🔺","🟦","⚪","⭐"],c:2},  
+ {q:"What comes next? 10, 20, 30, ?",a:["35","40","45","50"],c:1},  
+ {q:"Which animal says WOOF?",a:["🐱 Cat","🐶 Dog","🐮 Cow","🐦 Bird"],c:1},  
+ {q:"How many legs does a dog have?",a:["2","3","4","6"],c:2},  
+ {q:"What is 3 + 4?",a:["5","6","7","8"],c:2},  
+ {q:"Which is the tallest?",a:["🐜 Ant","🐘 Elephant","🐭 Mouse","🐱 Cat"],c:1},  
+ {q:"What comes next? 1, 3, 5, ?",a:["6","7","8","9"],c:1},  
+ {q:"Which one is a vegetable?",a:["🥕 Carrot","🍎 Apple","🍌 Banana","🍇 Grapes"],c:0},  
+ {q:"What is 10 - 5?",a:["3","4","5","6"],c:2},  
+ {q:"🎉 Final Challenge! What is 6 + 4?",a:["8","9","10","11"],c:2}  
+  
+];  
+  
+  
+/* =========================  
+   STORAGE  
+========================= */  
+  
+const KEY="littleBrainV10";  
+  
+let data=JSON.parse(  
+  localStorage.getItem(KEY)  
+) || {  
+  unlocked:1,  
+  completed:[],  
+  stars:0,  
+  correct:0,  
+  answered:0  
+};  
+  
+let currentLevel=1;  
+let answered=false;  
+  
+  
+/* =========================  
+   SAVE  
+========================= */  
+  
+function save(){  
+  localStorage.setItem(  
+    KEY,  
+    JSON.stringify(data)  
+  );  
+}  
+  
+  
+/* =========================  
+   SCREEN CONTROL  
+========================= */  
+  
+const screens=[  
+  "home",  
+  "game",  
+  "map",  
+  "progress",  
+  "badges",  
+  "character",  
+  "parents"  
+];  
+  
+function hideAll(){  
+  
+  screens.forEach(id=>{  
+    document.getElementById(id)  
+      .classList.add("hidden");  
+  });  
+  
+}  
+  
+function show(id){  
+  
+  hideAll();  
+  
+  document.getElementById(id)  
+    .classList.remove("hidden");  
+  
+}  
+  
+  
+/* =========================  
+   HOME  
+========================= */  
+  
+function goHome(){  
+  show("home");  
+}  
+  
+  
+/* =========================  
+   START GAME  
+========================= */  
+  
+function startGame(){  
+  
+  currentLevel=data.unlocked || 1;  
+  
+  if(currentLevel>30){  
+    currentLevel=30;  
+  }  
+  
+  show("game");  
+  
+  loadLevel();  
+}  
+  
+  
+/* =========================  
+   LOAD LEVEL  
+========================= */  
+  
+function loadLevel(){  
+  
+  answered=false;  
+  
+  const level=levels[currentLevel-1];  
+  
+  document.getElementById("levelNumber")  
+    .textContent=currentLevel;  
+  
+  document.getElementById("gameStars")  
+    .textContent=data.stars;  
+  
+  document.getElementById("progressFill")  
+    .style.width=(currentLevel/30*100)+"%";  
+  
+  document.getElementById("question")  
+    .textContent=level.q;  
+  
+  const answers=  
+    document.getElementById("answers");  
+  
+  answers.innerHTML="";  
+  
+  document.getElementById("feedback")  
+    .textContent="";  
+  
+  document.getElementById("feedback")  
+    .className="feedback";  
+  
+  document.getElementById("nextBtn")  
+    .classList.add("hidden");  
+  
+  level.a.forEach((answer,index)=>{  
+  
+    const btn=document.createElement("button");  
+  
+    btn.className="answer";  
+    btn.textContent=answer;  
+  
+    btn.onclick=()=>{  
+      checkAnswer(index,btn);  
+    };  
+  
+    answers.appendChild(btn);  
+  
+  });  
+  
+}  
+  
+  
+/* =========================  
+   ANSWER  
+========================= */  
+  
+function checkAnswer(index,button){  
+  
+  if(answered) return;  
+  
+  answered=true;  
+  
+  const level=levels[currentLevel-1];  
+  
+  data.answered++;  
+  
+  const feedback=  
+    document.getElementById("feedback");  
+  
+  if(index===level.c){  
+  
+    data.correct++;  
+  
+    data.stars+=3;  
+  
+    if(!data.completed.includes(currentLevel)){  
+      data.completed.push(currentLevel);  
+    }  
+  
+    if(currentLevel<30){  
+  
+      data.unlocked=Math.max(  
+        data.unlocked,  
+        currentLevel+1  
+      );  
+  
+    }  
+  
+    feedback.textContent=  
+      "🎉 Great job! +3 Stars!";  
+  
+    feedback.classList.add("correct");  
+  
+    button.style.background="#55c94f";  
+    button.style.color="white";  
+  
+  }else{  
+  
+    feedback.textContent=  
+      "💡 Good try! Try the next one!";  
+  
+    feedback.classList.add("wrong");  
+  
+    button.style.background="#e88989";  
+    button.style.color="white";  
+  }  
+  
+  save();  
+  
+  document.getElementById("gameStars")  
+    .textContent=data.stars;  
+  
+  document.getElementById("nextBtn")  
+    .classList.remove("hidden");  
+  
+}  
+  
+  
+/* =========================  
+   NEXT LEVEL  
+========================= */  
+  
+function nextLevel(){  
+  
+  if(currentLevel<30){  
+  
+    currentLevel++;  
+  
+    loadLevel();  
+  
+  }else{  
+  
+    showCompletion();  
+  
+  }  
+  
+}  
+  
+  
+/* =========================  
+   FINISH  
+========================= */  
+  
+function showCompletion(){  
+  
+  const question=  
+    document.getElementById("question");  
+  
+  question.textContent=  
+    "🏆 Amazing! You completed all 30 levels!";  
+  
+  document.getElementById("answers")  
+    .innerHTML="";  
+  
+  document.getElementById("feedback")  
+    .textContent=  
+    "🎉 You are a Brain Adventure Champion!";  
+  
+  document.getElementById("feedback")  
+    .className="feedback correct";  
+  
+  document.getElementById("nextBtn")  
+    .classList.add("hidden");  
+  
+  data.unlocked=30;  
+  
+  save();  
+  
+}  
+  
+  
+/* =========================  
+   MAP  
+========================= */  
+  
+function showMap(){  
+  
+  show("map");  
+  
+  const grid=  
+    document.getElementById("mapGrid");  
+  
+  grid.innerHTML="";  
+  
+  for(let i=1;i<=30;i++){  
+  
+    const btn=document.createElement("button");  
+  
+    btn.className="level-btn";  
+  
+    if(data.completed.includes(i)){  
+  
+      btn.classList.add("completed");  
+  
+      btn.textContent="⭐ "+i;  
+  
+    }else if(i<=data.unlocked){  
+  
+      btn.classList.add("unlocked");  
+  
+      btn.textContent="▶️ "+i;  
+  
+    }else{  
+  
+      btn.classList.add("locked");  
+  
+      btn.textContent="🔒";  
+  
+    }  
+  
+    if(i<=data.unlocked){  
+  
+      btn.onclick=()=>{  
+  
+        currentLevel=i;  
+  
+        show("game");  
+  
+        loadLevel();  
+  
+      };  
+  
+    }  
+  
+    grid.appendChild(btn);  
+  
+  }  
+  
+}  
+  
+  
+/* =========================  
+   PROGRESS  
+========================= */  
+  
+function showProgress(){  
+  
+  show("progress");  
+  
+  document.getElementById("completedStat")  
+    .textContent=  
+    data.completed.length+" / 30";  
+  
+  document.getElementById("starsStat")  
+    .textContent=data.stars;  
+  
+  let score=0;  
+  
+  if(data.answered>0){  
+  
+    score=Math.round(  
+      data.correct/data.answered*100  
+    );  
+  
+  }  
+  
+  document.getElementById("scoreStat")  
+    .textContent=score+"%";  
+  
+  document.getElementById("badgeStat")  
+    .textContent=countBadges();  
+  
+}  
+  
+  
+/* =========================  
+   BADGES  
+========================= */  
+  
+const badgeList=[  
+  
+ {  
+  icon:"🌱",  
+  name:"First Step",  
+  text:"Complete level 1",  
+  check:()=>data.completed.length>=1  
+ },  
+  
+ {  
+  icon:"⭐",  
+  name:"Star Collector",  
+  text:"Earn 10 stars",  
+  check:()=>data.stars>=10  
+ },  
+  
+ {  
+  icon:"🧠",  
+  name:"Brain Builder",  
+  text:"Complete 5 levels",  
+  check:()=>data.completed.length>=5  
+ },  
+  
+ {  
+  icon:"🚀",  
+  name:"Super Learner",  
+  text:"Complete 10 levels",  
+  check:()=>data.completed.length>=10  
+ },  
+  
+ {  
+  icon:"🏆",  
+  name:"Champion",  
+  text:"Complete 20 levels",  
+  check:()=>data.completed.length>=20  
+ },  
+  
+ {  
+  icon:"👑",  
+  name:"Brain Master",  
+  text:"Complete all 30 levels",  
+  check:()=>data.completed.length>=30  
+ }  
+  
+];  
+  
+  
+function countBadges(){  
+  
+  return badgeList.filter(  
+    b=>b.check()  
+  ).length;  
+  
+}  
+  
+  
+function showBadges(){  
+  
+  show("badges");  
+  
+  const container=  
+    document.getElementById("badgeContainer");  
+  
+  container.innerHTML="";  
+  
+  badgeList.forEach(b=>{  
+  
+    const div=document.createElement("div");  
+  
+    div.className="badge";  
+  
+    if(!b.check()){  
+      div.classList.add("locked-badge");  
+    }  
+  
+    div.innerHTML=`  
+      <div class="badge-icon">${b.icon}</div>  
+      <b>${b.name}</b>  
+      <br>  
+      <small>${b.text}</small>  
+    `;  
+  
+    container.appendChild(div);  
+  
+  });  
+  
+}  
+  
+  
+/* =========================  
+   CHARACTER  
+========================= */  
+  
+function showCharacter(){  
+  
+  show("character");  
+  
+  document.getElementById("charStars")  
+    .textContent=data.stars;  
+  
+  document.getElementById("charLevels")  
+    .textContent=data.completed.length;  
+  
+}  
+  
+  
+/* =========================  
+   PARENTS  
+========================= */  
+  
+function showParents(){  
+  
+  show("parents");  
+  
+  document.getElementById("parentProgress")  
+    .textContent=  
+    data.completed.length+  
+    " of 30 levels completed.";  
+  
+  document.getElementById("parentStars")  
+    .textContent=  
+    data.stars+" stars";  
+  
+}  
+  
+  
+/* =========================  
+   START  
+========================= */  
+  
+save();  
+  
+</script>  </body>  
+</html>
